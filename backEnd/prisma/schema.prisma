@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  adminID  Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  password String
+}
+
+model Devotee {
+  id             Int       @id @default(autoincrement())
+  userID         String    @unique
+  firstName      String
+  middleName     String?
+  lastName       String
+  photoURL       String?
+  address        String
+  flatNumber     String
+  area           String
+  state          String
+  city           String
+  pinCode        String
+  email          String    @unique()
+  devoteeId      String?
+  password       String?
+  initiationDate String
+  payments       Payment[]
+}
+
+model Payment {
+  paymentID Int       @id @default(autoincrement())
+  devoteeID Int
+  month     String
+  year      Int
+  amount    Int
+  paidDate  DateTime?
+  devotee   Devotee   @relation(fields: [devoteeID], references: [id])
+}
+
+model OTP {
+  email String @unique @db.VarChar(255)
+  otp   String @db.VarChar(255)
+}
